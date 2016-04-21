@@ -2,6 +2,7 @@ var GitHubApi = require('github');
 var message = require('lambda-cfn').message;
 var d3 = require('d3-queue');
 var splitOnComma = require('lambda-cfn').splitOnComma;
+var getEnv = require('lambda-cfn').getEnv;
 
 module.exports.config = {
   name: '2faDisabled',
@@ -29,9 +30,9 @@ module.exports.fn = function(event, callback) {
     version: "3.0.0"
   });
 
-  var githubToken = process.env.githubToken;
-  var githubOrganization = process.env.githubOrganization;
-  var allowedList = splitOnComma(process.env.allowedList);
+  var githubToken = getEnv('githubToken');
+  var githubOrganization = getEnv('githubOrganization');
+  var allowedList = splitOnComma(getEnv('allowedList'));
   var q = d3.queue(1);
   var membersArray = [];
 
