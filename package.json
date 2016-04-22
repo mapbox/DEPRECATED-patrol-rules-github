@@ -1,6 +1,6 @@
 {
   "name": "patrol-rules-github",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "GitHub Patrol rules",
   "main": "index.js",
   "engines": {
@@ -15,9 +15,9 @@
     "test": "NODE_ENV=test tape test/*.test.js test/**/*.test.js"
   },
   "dependencies": {
-    "github": "^0.2.4",
-    "lambda-cfn": "^0.0.7",
-    "d3-queue": "^2.0.3"
+    "github": "0.2.4",
+    "lambda-cfn": "0.0.10",
+    "d3-queue": "2.0.3"
   },
   "devDependencies": {
     "eslint": "^2.4.0",
