@@ -5,7 +5,10 @@ var util = require('util');
 module.exports.config = {
   name: 'privateRepoFork',
   sourcePath: 'rules/privateRepoFork.js',
-  snsRule: {}
+  gatewayRule: {
+    method: 'POST',
+    apiKey: true
+  }
 };
 
 module.exports.fn = function(event,callback) {
