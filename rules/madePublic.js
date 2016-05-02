@@ -5,7 +5,10 @@ var util = require('util');
 module.exports.config = {
   name: 'madePublic',
   sourcePath: 'rules/madePublic.js',
-  snsRule: {}
+  gatewayRule: {
+    method: 'POST',
+    apiKey: true
+  }
 };
 
 module.exports.fn = function(event,callback) {
