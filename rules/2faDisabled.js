@@ -79,13 +79,15 @@ module.exports.fn = function(event, callback) {
       if (match.length === 1) {
         notif = {
           subject: 'User ' + match[0] + ' has disabled 2FA on their Github account',
-          summary: 'User ' + match[0] + ' has disabled 2FA on their Github account'
+          summary: 'User ' + match[0] + ' has disabled 2FA on their Github account',
+          event: match
         };
       }
       if (match.length > 1) {
         notif = {
           subject: 'Multiple users have disabled 2FA on their Github accounts',
-          summary: 'The following users have disabled 2FA on their Github account: ' + match
+          summary: 'The following users have disabled 2FA on their Github account:\n' + match.join('\n') + '\n',
+          event: match
         };
       }
       message(notif, function(err, result) {
