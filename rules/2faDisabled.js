@@ -107,10 +107,12 @@ module.exports.fn = function(event, callback) {
         subject: 'Error: Github 2FA check',
         summary: err
       };
+      console.log(err);
       message(notif, function(err,result) {
         return callback(err,result);
       });
     }
+    console.log(res[1]);
     callback(err, res[1]);
   });
 };
