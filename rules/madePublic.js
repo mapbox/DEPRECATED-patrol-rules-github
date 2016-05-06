@@ -1,7 +1,6 @@
 var message = require('lambda-cfn').message;
 var splitOnComma = require('lambda-cfn').splitOnComma;
 var util = require('util');
-var assert = require('assert');
 
 module.exports.config = {
   name: 'madePublic',
