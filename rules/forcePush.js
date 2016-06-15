@@ -13,10 +13,12 @@ module.exports.config = {
 
 module.exports.fn = function(event,callback) {
   if (event.zen != undefined) {
+    console.log('event zen');
     var ping = 'GitHub ping event received';
     console.log(ping);
     return callback(null, ping);
   } else {
+    console.log('event okay');
     if (event.forced && event.repository && event.pusher) {
       var notif = {
         subject: (util.format('Force push on %s by %s', event.repository.name, event.pusher.name)).substring(0,100),
@@ -24,6 +26,7 @@ module.exports.fn = function(event,callback) {
         event: event
       };
       message(notif, function(err,result) {
+        if(err) console.log('error ', err);
         console.log(JSON.stringify(notif));
         return callback(err,result);
         });
