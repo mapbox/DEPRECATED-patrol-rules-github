@@ -24,6 +24,7 @@ module.exports.fn = function(event,callback) {
         event: event
       };
       message(notif, function(err,result) {
+        if(err) console.log(err);
         console.log(JSON.stringify(notif));
         return callback(err,result);
         });
