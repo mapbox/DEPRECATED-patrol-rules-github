@@ -21,7 +21,7 @@ module.exports.fn = function(event,callback) {
     var secretKeys = (keypath.get(event, 'comment.body') || '').match(/sk\.[\w\.\d]+/g);
     try {
       jwtDecode(secretKeys[0])
-      message({
+      var payload = {
         subject: util.format('%s mentioned a private token on %s',
           keypath.get(event, 'comment.user.login'),
           keypath.get(event, 'repository.name')
@@ -31,8 +31,9 @@ module.exports.fn = function(event,callback) {
           keypath.get(event, 'comment.html_url'),
           keypath.get(event, 'repository.name')),
         event: event
-      }, function(err, result) {
-        return callback(err, result);
+      };
+      message(payload, function(err, result) {
+        return callback(err, payload);
       });
     } catch (e) {
       callback(null, 'A safe comment was posted');
