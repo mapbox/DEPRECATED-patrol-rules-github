@@ -41,6 +41,17 @@ The following rules are included with patrol-rules-github.  Each rule is configu
   - subscribed SNS topic name
   - AWS keys for SNS topic
 
+#### mentionSomethingPrivate
+
+- **Description** - Alerts when someone drops a private Mapbox token in a GitHub issue
+- **Trigger** - SNS topic, webhook must be proxied through a service like Zapier
+- **Parameters**
+  - none
+- **Outputs**
+  - subscribed SNS topic name
+  - AWS keys for SNS topic
+ 
+
 ### Tests
 
 To run tests, clone the repository, run `npm install` and then `npm test`. 
