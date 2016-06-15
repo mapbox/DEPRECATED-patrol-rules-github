@@ -15,9 +15,11 @@
     "test": "NODE_ENV=test tape test/*.test.js test/**/*.test.js"
   },
   "dependencies": {
+    "d3-queue": "2.0.3",
     "github": "0.2.4",
-    "lambda-cfn": "0.1.4",
-    "d3-queue": "2.0.3"
+    "jwt-decode": "2.0.1",
+    "keypather": "2.0.0",
+    "lambda-cfn": "0.1.4"
   },
   "devDependencies": {
     "eslint": "^2.4.0",
