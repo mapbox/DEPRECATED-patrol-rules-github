@@ -19,7 +19,7 @@ module.exports.fn = function(event,callback) {
     return callback(null, ping);
   } else {
     console.log('event okay');
-    if (event.forced && event.repository && event.pusher) {
+    if (event.forced && event.repository && event.pusher && event.ref.indexOf(event.repository.master_branch)) {
       var notif = {
         subject: (util.format('Force push on %s by %s', event.repository.name, event.pusher.name)).substring(0,100),
         summary: util.format('%s force pushed to %s', event.pusher.name, event.repository.name),
