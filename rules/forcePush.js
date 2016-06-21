@@ -17,6 +17,7 @@ module.exports.forcePush = function(event,callback) {
       return callback(null, ping);
   } else {
       if (event.forced && event.repository && event.pusher && event.ref.indexOf(event.repository.master_branch) > -1) {
+        console.log('force push to master');
           var notification = {
               subject: (util.format('Force push on the %s branch of %s by %s', event.repository.name, event.repository.master_branch, event.pusher.name)).substring(0,100),
               summary: util.format('%s force pushed on %s branch to %s', event.pusher.name, event.repository.master_branch, event.repository.name),
@@ -28,9 +29,11 @@ module.exports.forcePush = function(event,callback) {
           });
       } else {
             if(event.forced && event.repository && event.pusher && event.ref.indexOf(event.repository.master_branch) === -1) {
+                console.log('force push to unshared branch');
                 return callback(null,'Force push to a branch that is not master');
             }
             else {
+                console.log('errrrrorrrrr');
                 var badmsg = 'Error: unknown payload received';
                 console.log(badmsg);
                 return callback(badmsg);
