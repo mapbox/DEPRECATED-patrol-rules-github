@@ -4,7 +4,7 @@
   "description": "GitHub Patrol rules",
   "main": "index.js",
   "engines": {
-    "node": "0.10.38"
+    "node": "4.3.2"
   },
   "repository": {
     "type": "git",
@@ -15,9 +15,9 @@
     "test": "NODE_ENV=test tape test/*.test.js test/**/*.test.js"
   },
   "dependencies": {
-    "github": "0.2.4",
-    "lambda-cfn": "0.1.4",
-    "d3-queue": "2.0.3"
+    "github": "2.2.0",
+    "lambda-cfn": "git://github.com/mapbox/lambda-cfn.git#node4",
+    "d3-queue": "3.0.1"
   },
   "devDependencies": {
     "eslint": "^2.4.0",
