@@ -3,16 +3,15 @@ var splitOnComma = require('lambda-cfn').splitOnComma;
 var util = require('util');
 
 module.exports.config = {
-  name: 'goodStarterBug',
-  sourcePath: 'rules/goodStarterBug.js',
+  name: 'postBugToSlack',
+  sourcePath: 'rules/postBugToSlack.js',
   gatewayRule: {
     method: 'POST',
     apiKey: false
   }
 };
 
-
-module.exports.goodStarterBug = function (event, callback) {
+module.exports.postBugToSlack = function (event, callback) {
     if (event.zen != undefined) {
         var ping = 'GitHub ping event received';
         return callback(null, ping);
