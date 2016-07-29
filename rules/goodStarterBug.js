@@ -4,7 +4,7 @@ var util = require('util');
 
 module.exports.config = {
   name: 'goodStarterBug',
-  sourcePath: 'rules/good-starter-bug.js',
+  sourcePath: 'rules/goodStarterBug.js',
   gatewayRule: {
     method: 'POST',
     apiKey: false
