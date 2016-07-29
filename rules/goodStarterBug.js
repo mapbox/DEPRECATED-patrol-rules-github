@@ -17,7 +17,7 @@ module.exports.goodStarterBug = function(event,callback) {
       var ping = 'GitHub ping event received';
       return callback(null, ping);
  } else{
- 	if (event.labels){
+ 	if (event.labels && event.action === 'labeled'){
  		event.labels.forEach(function(item,index){
  			if (item.name === 'good-starter-bug') {
  				console.log('good-starter-bug label present');
