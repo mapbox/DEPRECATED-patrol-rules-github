@@ -3,7 +3,7 @@ var splitOnComma = require('lambda-cfn').splitOnComma;
 var util = require('util');
 
 module.exports.config = {
-  name: 'good-starter-bug',
+  name: 'goodStarterBug',
   sourcePath: 'rules/good-starter-bug.js',
   gatewayRule: {
     method: 'POST',
@@ -12,7 +12,7 @@ module.exports.config = {
 };
 
 
-module.exports.forcePush = function(event,callback) {
+module.exports.goodStarterBug = function(event,callback) {
  if (event.zen != undefined) {
       var ping = 'GitHub ping event received';
       return callback(null, ping);
