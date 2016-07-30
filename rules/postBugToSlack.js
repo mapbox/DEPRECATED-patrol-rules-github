@@ -12,6 +12,7 @@ module.exports.config = {
 };
 
 module.exports.postBugToSlack = function (event, callback) {
+    console.log(event);
     if (event.zen != undefined) {
         var ping = 'GitHub ping event received';
         return callback(null, ping);
