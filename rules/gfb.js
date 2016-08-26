@@ -17,8 +17,8 @@ module.exports.fn = function (event, callback) {
         var ping = 'GitHub ping event received';
         return callback(null, ping);
     } else {
-        if (event.labels){
-            event.labels.forEach(function(item,index) {
+        if (event.label){
+            event.label.forEach(function(item,index) {
                 if (item.name === 'good-starter-bug') {
                     var notification = {
                              subject: (util.format('`good-starter-bug`: In %s by %s', event.repository.name, event.issue.user.login)).substring(0,100),
@@ -27,14 +27,12 @@ module.exports.fn = function (event, callback) {
                     };
                     message(notification, function(err,result) {
                       if(err) console.log('error ', err);
-                      console.log('result ', result);
                       return callback(err,result);
                     });
                 }
             });
         } else {
             var badmsg = 'Error: unknown payload received';
-            console.log(badmsg);
             return callback(badmsg);
         }
     }
