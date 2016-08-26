@@ -12,10 +12,11 @@ module.exports.config = {
 };
 
 module.exports.fn = function (event, callback) {
-    if (event.zen) {
+    if (event.zen != undefined) {
         var ping = 'GitHub ping event received';
         return callback(null, ping);
     } else {
+        console.log('event ', event);
         if (event.labels){
             event.labels.forEach(function(item,index) {
                 if (item.name === 'good-starter-bug') {
