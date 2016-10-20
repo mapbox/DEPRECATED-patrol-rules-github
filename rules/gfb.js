@@ -34,7 +34,7 @@ module.exports.fn = function (event, callback) {
                 }
             });
         } else {
-            var badmsg = 'Error: unknown payload received';
+            var badmsg = 'Errorrrr: unknown payload received';
             console.log(badmsg);
             return callback(badmsg);
         }
