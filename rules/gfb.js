@@ -12,14 +12,13 @@ module.exports.config = {
 };
 
 module.exports.fn = function (event, callback) {
-    console.log('startevent',JSON.stringify(event));
     if (event.zen != undefined) {
         var ping = 'GitHub ping event received';
         return callback(null, ping);
     } else {
         console.log('event ', event);
         if (event.action === 'labeled'){
-            event.labels.forEach(function(label,index) {
+            event.issue.labels.forEach(function(label,index) {
                 if (label.name === 'good-starter-bug') {
                     var notification = {
                              subject: (util.format('`good-starter-bug`: In %s by %s', event.repository.name, event.issue.user.login)).substring(0,100),
@@ -34,7 +33,7 @@ module.exports.fn = function (event, callback) {
                 }
             });
         } else {
-            var badmsg = 'Errorrrr: unknown payload received';
+            var badmsg = 'Error: unknown payload received';
             console.log(badmsg);
             return callback(badmsg);
         }
