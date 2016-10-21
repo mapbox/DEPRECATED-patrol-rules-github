@@ -22,7 +22,7 @@ module.exports.fn = function (event, callback) {
             if (label.name === 'good-starter-bug') {
                 var notification = {
                          subject: (util.format('`good-starter-bug`: In %s by %s', event.repository.name, event.issue.user.login)).substring(0,100),
-                         summary: util.format('%s applied `good-starter-bug` label on %s', event.issue.user.login, event.issue.html_url),
+                         summary: '',
                          event: event
                 };
                 message(notification, function(err,result) {
