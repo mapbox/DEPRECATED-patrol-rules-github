@@ -8,6 +8,20 @@ module.exports.config = {
     gatewayRule: {
         method: 'POST',
         apiKey: false
+    },
+    parameters: {
+        bugLabel: {
+            Type: 'String',
+            Description: 'Name of the bug label'
+        },
+        slackChannel: {
+            Type: 'String',
+            Description: 'Name of the slack channel where bugs are to be posted eg.(#good-starter-bug)'
+        },
+        slackWebhookUrl: {
+            Type: 'String',
+            Description: 'Webhook URL of the slack channel'
+        }
     }
 };
 
@@ -19,9 +33,11 @@ module.exports.fn = function (event, callback) {
         console.log('event ', event);
         if (event.action === 'labeled'){
             var label = event.label;
-            if (label.name === 'good-starter-bug') {
+            if (label.name === getEnv('bugLabel')) {
+                event["slackChannel"] = getEnv('slackChannel');
+                event["Webhook"] = getEnv('slackWebhookUrl');
                 var notification = {
-                         subject: (util.format('`good-starter-bug`: In %s by %s', event.repository.name, event.issue.user.login)).substring(0,100),
+                         subject: (util.format('`'+ getEnv('bugLabel') + '`: In %s by %s', event.repository.name, event.issue.user.login)).substring(0,100),
                          summary: '',
                          event: event
                 };
