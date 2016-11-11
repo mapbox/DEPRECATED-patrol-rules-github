@@ -1,6 +1,7 @@
 'use strict';
 var message = require('lambda-cfn').message;
 var util = require('util');
+var getEnv = require('lambda-cfn').getEnv;
 
 module.exports.config = {
     name: 'gfb',
