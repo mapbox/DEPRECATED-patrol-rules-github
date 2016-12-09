@@ -4,6 +4,7 @@ var util = require('util');
 
 module.exports.config = {
   name: 'madePublic',
+  runtime: 'nodejs4.3',
   sourcePath: 'rules/madePublic.js',
   gatewayRule: {
     method: 'POST',

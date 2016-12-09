@@ -6,6 +6,7 @@ var getEnv = require('lambda-cfn').getEnv;
 
 module.exports.config = {
   name: '2faDisabled',
+  runtime: 'nodejs4.3',
   sourcePath: 'rules/2faDisabled.js',
   parameters: {
     'githubToken': {
