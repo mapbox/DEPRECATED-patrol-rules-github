@@ -106,7 +106,7 @@ getMembersNock();
 test('2fa single user disabled', function(t) {
   var event = "foo";
   process.env.allowedList = "jeff, carol, zach";
-  fn(event, function(err, message) {
+  fn(event, null, function(err, message) {
     var subject = message.subject;
     t.error(err, 'No error when calling ' + name);
     t.equal(subject, 'User ian has disabled 2FA on their Github account', 'Rule detected disabling of 2FA on a single Github user account');
@@ -118,7 +118,7 @@ getMembersNock();
 test('2fa multiple users disabled', function(t) {
   var event = "foo";
   process.env.allowedList = "jeff, carol";
-  fn(event, function(err, message){
+  fn(event, null, function(err, message){
     var subject = message.subject;
     t.error(err, 'No error when calling ' + name);
     t.equal(subject, 'Multiple users have disabled 2FA on their Github accounts', 'Rule detected disabling of 2FA on multiple Github user accounts');

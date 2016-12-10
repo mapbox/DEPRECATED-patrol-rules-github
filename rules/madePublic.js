@@ -11,7 +11,7 @@ module.exports.config = {
   }
 };
 
-module.exports.fn = function(event,callback) {
+module.exports.fn = function(event, context, callback) {
   if (event.zen != undefined) {
     var ping = 'GitHub ping event received';
     console.log(ping);

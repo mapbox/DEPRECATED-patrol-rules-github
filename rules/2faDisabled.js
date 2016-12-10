@@ -24,7 +24,7 @@ module.exports.config = {
   scheduledRule: 'rate(5 minutes)'
 };
 
-module.exports.fn = function(event, callback) {
+module.exports.fn = function(event, context, callback) {
 
   var github = new GitHubApi({
     version: "3.0.0"
