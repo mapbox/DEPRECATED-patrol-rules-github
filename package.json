@@ -1,6 +1,6 @@
 {
   "name": "patrol-rules-github",
-  "version": "0.0.7",
+  "version": "0.1.0",
   "description": "GitHub Patrol rules",
   "main": "index.js",
   "engines": {
