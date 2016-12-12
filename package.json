@@ -1,10 +1,10 @@
 {
   "name": "patrol-rules-github",
-  "version": "0.0.7",
+  "version": "0.1.0",
   "description": "GitHub Patrol rules",
   "main": "index.js",
   "engines": {
-    "node": "0.10.38"
+    "node": "4.3.2"
   },
   "repository": {
     "type": "git",
@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "github": "0.2.4",
-    "lambda-cfn": "0.1.4",
+    "lambda-cfn": "0.1.5",
     "d3-queue": "2.0.3"
   },
   "devDependencies": {

@@ -4,6 +4,7 @@ var util = require('util');
 
 module.exports.config = {
   name: 'privateRepoFork',
+  runtime: 'nodejs4.3',
   sourcePath: 'rules/privateRepoFork.js',
   gatewayRule: {
     method: 'POST',
