@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "github": "0.2.4",
-    "lambda-cfn": "mapbox/lambda-cfn#update",
+    "lambda-cfn": "mapbox/lambda-cfn",
     "d3-queue": "2.0.3"
   },
   "devDependencies": {
