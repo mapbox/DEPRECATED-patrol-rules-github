@@ -1,5 +1,5 @@
 {
-  "name": "patrol-rules-github",
+  "name": "@mapbox/patrol-rules-github",
   "version": "0.1.0",
   "description": "GitHub Patrol rules",
   "main": "index.js",
