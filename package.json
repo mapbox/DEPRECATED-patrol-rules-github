@@ -1,34 +1,34 @@
 {
-  "license": "BSD-2-Clause", 
+  "license": "BSD-2-Clause",
   "engines": {
     "node": "4.3.2"
-  }, 
-  "name": "patrol-rules-github", 
+  },
+  "name": "patrol-rules-github",
   "repository": {
-    "url": "https://github.com/mapbox/patrol-rules-github.git", 
+    "url": "https://github.com/mapbox/patrol-rules-github.git",
     "type": "git"
-  }, 
-  "author": "Mapbox, Inc.", 
+  },
+  "author": "Mapbox, Inc.",
   "bugs": {
     "url": "https://github.com/mapbox/patrol-rules-github/issues"
-  }, 
-  "version": "0.1.0", 
+  },
+  "version": "0.1.0",
   "dependencies": {
-    "github": "0.2.4", 
-    "d3-queue": "2.0.3", 
-    "lambda-cfn": "0.1.5"
-  }, 
+    "github": "0.2.4",
+    "d3-queue": "2.0.3",
+    "lambda-cfn": "^1.0.0"
+  },
   "scripts": {
-    "test": "NODE_ENV=test tape test/*.test.js test/**/*.test.js", 
+    "test": "NODE_ENV=test tape test/*.test.js test/**/*.test.js",
     "pretest": "eslint index.js"
-  }, 
+  },
   "devDependencies": {
-    "nock": "^7.5.0", 
-    "tape": "^4.5.1", 
-    "eslint": "^2.4.0", 
+    "nock": "^7.5.0",
+    "tape": "^4.5.1",
+    "eslint": "^2.4.0",
     "eslint-config-unstyled": "^1.1.0"
-  }, 
-  "main": "index.js", 
-  "homepage": "https://github.com/mapbox/patrol-rules-github", 
+  },
+  "main": "index.js",
+  "homepage": "https://github.com/mapbox/patrol-rules-github",
   "description": "GitHub Patrol rules"
 }
