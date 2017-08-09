@@ -1,5 +1,5 @@
 var test = require('tape');
-var rule = require('../../rules/privateRepoFork.js');
+var rule = require('../privateRepoFork/function.js');
 
 var privateFork = {
   forkee: {

@@ -6,9 +6,8 @@ var gitHubApi = require('github');
 
 var gitHub = new gitHubApi({version: "3.0.0"});
 
-var rule = require('../../rules/2faDisabled');
+var rule = require('../mfaDisabled/function.js');
 var fn = rule.fn;
-var name = rule.config.name;
 var q = d3.queue();
 
 process.env.githubOrganization = 'mapbox';
@@ -108,7 +107,7 @@ test('2fa single user disabled', function(t) {
   process.env.allowedList = "jeff, carol, zach";
   fn(event, {}, function(err, message) {
     var subject = message.subject;
-    t.error(err, 'No error when calling ' + name);
+    t.error(err, 'No error when calling function');
     t.equal(subject, 'User ian has disabled 2FA on their Github account', 'Rule detected disabling of 2FA on a single Github user account');
     t.end();
   });
@@ -120,7 +119,7 @@ test('2fa multiple users disabled', function(t) {
   process.env.allowedList = "jeff, carol";
   fn(event, {}, function(err, message){
     var subject = message.subject;
-    t.error(err, 'No error when calling ' + name);
+    t.error(err, 'No error when calling function');
     t.equal(subject, 'Multiple users have disabled 2FA on their Github accounts', 'Rule detected disabling of 2FA on multiple Github user accounts');
     t.end();
   });
