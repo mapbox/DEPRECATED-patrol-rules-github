@@ -1,29 +1,7 @@
 var GitHubApi = require('github');
-var message = require('lambda-cfn').message;
+var message = require('@mapbox/lambda-cfn').message;
 var d3 = require('d3-queue');
-var splitOnComma = require('lambda-cfn').splitOnComma;
-var getEnv = require('lambda-cfn').getEnv;
-
-module.exports.config = {
-  name: '2faDisabled',
-  runtime: 'nodejs4.3',
-  sourcePath: 'rules/2faDisabled.js',
-  parameters: {
-    'githubToken': {
-      'Type': 'String',
-      'Description': 'Github API token'
-    },
-    'githubOrganization': {
-      'Type': 'String',
-      'Description': 'Name of organization on Github'
-    },
-    'allowedList': {
-      'Type': 'String',
-      'Description': 'Comma separated list of Github accounts that do not require 2FA'
-    }
-  },
-  scheduledRule: 'rate(5 minutes)'
-};
+var splitOnComma = require('@mapbox/lambda-cfn').splitOnComma;
 
 module.exports.fn = function(event, context, callback) {
 
@@ -31,9 +9,9 @@ module.exports.fn = function(event, context, callback) {
     version: "3.0.0"
   });
 
-  var githubToken = getEnv('githubToken');
-  var githubOrganization = getEnv('githubOrganization');
-  var allowedList = splitOnComma(getEnv('allowedList'));
+  var githubToken = process.env.githubToken;
+  var githubOrganization = process.env.githubOrganization;
+  var allowedList = splitOnComma(process.env.allowedList);
   var q = d3.queue(1);
   var membersArray = [];
 

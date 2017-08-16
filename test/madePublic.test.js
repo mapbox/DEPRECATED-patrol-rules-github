@@ -1,5 +1,5 @@
 var test = require('tape');
-var rule = require('../../rules/madePublic.js');
+var rule = require('../madePublic/function.js');
 
 var goodWebhook = {
   repository: {

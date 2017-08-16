@@ -1,22 +1,12 @@
-var message = require('lambda-cfn').message;
-var splitOnComma = require('lambda-cfn').splitOnComma;
+var message = require('@mapbox/lambda-cfn').message;
+var splitOnComma = require('@mapbox/lambda-cfn').splitOnComma;
 var util = require('util');
-
-module.exports.config = {
-  name: 'privateRepoFork',
-  runtime: 'nodejs4.3',
-  sourcePath: 'rules/privateRepoFork.js',
-  gatewayRule: {
-    method: 'POST',
-    apiKey: false
-  }
-};
 
 module.exports.fn = function(event, context, callback) {
   if (event.zen != undefined) {
     var ping = 'GitHub ping event received';
     console.log(ping);
-    return callback(null,ping);
+    return callback(null, ping);
   } else {
     if (event.forkee && event.repository && event.repository.name && event.forkee.owner && event.forkee.owner.login) {
       if (event.repository.private) {

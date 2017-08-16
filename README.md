@@ -2,45 +2,43 @@
 
 [![Build Status](https://travis-ci.org/mapbox/patrol-rules-github.svg?branch=master)](https://travis-ci.org/mapbox/patrol-rules-github)
 
-A set of rules implemented using [lambda-cfn](https://github.com/mapbox/lambda-cfn) and designed to run on a [Patrol](https://github.com/mapbox/patrol) stack.  The rules in this repository all aim to monitor an organizations Github repositories and users for best practices, security and compliance. Read more about the Patrol architecture on the [Patrol project](https://github.com/mapbox/patrol).
+A set of functions implemented using [lambda-cfn](https://github.com/mapbox/lambda-cfn) to monitor an organization's GitHub repositories and users for best practices, security and compliance. Part of the Mapbox [Patrol](https://github.com/mapbox/patrol) security framework.
 
-### Usage
+### Deploying
 
-Follow the steps on the [Patrol](https://github.com/mapbox/patrol) readme to set up your own Patrol stack on AWS which makes use of the patrol-rules-github rules.  Follow instructions on Patrol on how to enable or disable particular rules and how to deploy on your own AWS account.
+Please see the [lambda-cfn README](https://github.com/mapbox/lambda-cfn)
 
-### Rules
+### Patrol Functions
 
-The following rules are included with patrol-rules-github.  Each rule is configurable, and you will be prompted to enter configuration values when creating a Patrol stack as described on the Patrol readme.
+The following functions are included with patrol-rules-github.  Each function is configurable, and you will be prompted to enter configuration values when deploying the function with `lambda-cfn`.
 
 #### 2faDisabled
 
-- **Description** - Checks the GitHub organization for users with 2fa disabled. 
+- **Description** - Checks the GitHub organization for users with 2fa disabled.
 - **Trigger** - Scheduled, every 5 minutes
 - **Parameters**
   - githubOrganization - Name of the GitHub organization to query
-  - githubToken - personal GitHub token. Must be created by an organization owner.
-  - allowedList - A comma separated list of allowed users with 2fa disabled. 
-  
+  - githubToken - personal GitHub token. *Must* be created by an organization owner.
+  - allowedList - A comma separated list of allowed users with 2fa disabled.
+
 #### madePublic
 
-- **Description** - Alerts when a private repository in the organization is made public. Uses GitHub organizational webhooks, and requires a third party service like Zapier to proxy the webhook to the SNS topic.  
-- **Trigger** - SNS topic, webhook must be proxied through a service like Zapier
+- **Description** - Alerts when a private repository in the organization is made public. Uses GitHub organizational webhooks, which must be configured to send events to the webhook URL. The Github webhook should be set to fire on events of type "public".
+- **Trigger** -  webhook
 - **Parameters**
   - none
 - **Outputs**
-  - subscribed SNS topic name
-  - AWS keys for SNS topic
-  
+  - webhook URL
+
 #### privateRepoFork
 
-- **Description** - Alerts when a private repository in the organization is forked. Uses GitHub organizational webhooks, and requires a third party service like Zapier to proxy the webhook to the SNS topic.  
-- **Trigger** - SNS topic, webhook must be proxied through a service like Zapier
-- **Parameters**   
+- **Description** - Alerts when a private repository in the organization is forked. Uses GitHub organizational webhooks, which must be configured to send events to the webhook URL. The Github webhook should set to fire on events of type "fork".
+- **Trigger** - webhook
+- **Parameters**
   - none
 - **Outputs**
-  - subscribed SNS topic name
-  - AWS keys for SNS topic
+  - webhook URL
 
-### Tests
+### Contributing
 
-To run tests, clone the repository, run `npm install` and then `npm test`. 
+Please see [CONTRIBUTING.md](CONTRIBUTING.md)

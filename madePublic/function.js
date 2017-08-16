@@ -1,16 +1,6 @@
-var message = require('lambda-cfn').message;
-var splitOnComma = require('lambda-cfn').splitOnComma;
+var message = require('@mapbox/lambda-cfn').message;
+var splitOnComma = require('@mapbox/lambda-cfn').splitOnComma;
 var util = require('util');
-
-module.exports.config = {
-  name: 'madePublic',
-  runtime: 'nodejs4.3',
-  sourcePath: 'rules/madePublic.js',
-  gatewayRule: {
-    method: 'POST',
-    apiKey: false
-  }
-};
 
 module.exports.fn = function(event, context, callback) {
   if (event.zen != undefined) {
@@ -27,7 +17,7 @@ module.exports.fn = function(event, context, callback) {
       message(notif, function(err,result) {
         console.log(JSON.stringify(notif));
         return callback(err,result);
-        });
+      });
     } else {
       var badmsg = 'Error: unknown payload received';
       console.log(badmsg);
