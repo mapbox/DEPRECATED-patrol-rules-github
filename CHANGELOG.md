@@ -1,5 +1,9 @@
 ## Unreleased
 
+## 1.0.0
+
+* Refactored for lambda-cfn v2.0.0
+
 ## 0.1.2
 
 * Fix lambda function syntax
