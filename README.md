@@ -39,6 +39,12 @@ The following functions are included with patrol-rules-github. Each function is 
 - **Outputs**
   - Webhook URL
 
+## Webhook Configuration
+
+Some of these rule functions (`madePublic`, `privateRepoFork`) rely on webhooks. Webhook URLs are automatically generated when deploying these rules to AWS. You can obtain these URLs by running `lambda-cfn info <environment name>` and checking the output section of the CloudFormation template.
+
+Once you have the webhook URL you will need to create a GitHub organizational webhook. Only GitHub organization owners can create organizational webhooks. The Content Type for each webhook must be set to `application/json` and not the default `application/x-www-form-urlencoded`. You will also need to select individual events for each webhook rather than accept the default settings - see the rule function documentation for more details.
+
 ## Contributing
 
 Please see [CONTRIBUTING.md](CONTRIBUTING.md).
