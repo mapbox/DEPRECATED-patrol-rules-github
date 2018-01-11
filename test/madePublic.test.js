@@ -44,36 +44,33 @@ var goodResponse = {
   subject: 'Private repository good-repo made public by testuser'
 };
 
-var badResponse = {
-  subject: 'Error detected in Github made-repository-public webhook payload',
-  summary: badWebhook
-};
-
 var longResponse = 'Private repository xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
 
 test('GitHub ping', function(t) {
   rule.fn(githubPing, {}, function(err, message) {
+    t.error(err, 'does not error');
     t.equal(message,'GitHub ping event received');
     t.end();
   });
 });
 
 test('Unknown payload', function(t) {
-  rule.fn('{"random":"payload"}', {}, function(err, message) {
-    t.equal(err,'Error: unknown payload received');
+  rule.fn('{"random":"payload"}', {}, function(err, _message) {
+    t.equal(err, 'Error: unknown payload received');
     t.end();
   });
 });
 
 test('Well formed webhook payload', function(t) {
   rule.fn(goodWebhook, {}, function(err,message) {
-    t.equal(message.subject, goodResponse.subject,'Subject line matched');
+    t.error(err, 'does not error');
+    t.equal(message.subject, goodResponse.subject, 'Subject line matched');
     t.end();
   });
 });
 
 test('Malformed webhook payload', function(t) {
-  rule.fn(badWebhook, {}, function(err,message) {
+  rule.fn(badWebhook, {}, function(err, _message) {
     t.equal(err,'Error: unknown payload received');
     t.end();
   });
@@ -81,8 +78,9 @@ test('Malformed webhook payload', function(t) {
 
 test('Long subject line truncation', function(t) {
   rule.fn(longWebhook, {}, function(err,message) {
-    t.equal((message.subject).length,100,'Subject line 100 characters long');
-    t.equal(message.subject,longResponse,'Subject line truncation validation');
+    t.error(err, 'does not error');
+    t.equal((message.subject).length, 100, 'Subject line 100 characters long');
+    t.equal(message.subject, longResponse, 'Subject line truncation validation');
     t.end();
   });
 });
