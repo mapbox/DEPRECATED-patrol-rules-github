@@ -21,12 +21,12 @@ module.exports.fn = function(event, context, callback) {
     filter: '2fa_disabled'
   };
 
-  function getMembers(query,next) {
+  function getMembers(query, next) {
     github.authenticate({
       type: 'token',
       token: githubToken
     });
-    github.orgs.getMembers(query, function(err,res) {
+    github.orgs.getMembers(query, function(err, res) {
       if (err) {
         return next(err);
       }
@@ -39,12 +39,12 @@ module.exports.fn = function(event, context, callback) {
           query.page = 1;
         }
         query.page = query.page + 1;
-        getMembers(query,next);
+        getMembers(query, next);
       } else {
         return next();
       }
     });
-  };
+  }
 
   function notify(next) {
     var notif;
@@ -87,8 +87,8 @@ module.exports.fn = function(event, context, callback) {
         summary: err
       };
       console.log(err);
-      message(notif, function(err,result) {
-        return callback(err,result);
+      message(notif, function(err, result) {
+        return callback(err, result);
       });
     }
     console.log(res[1]);
