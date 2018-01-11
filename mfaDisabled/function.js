@@ -6,7 +6,7 @@ var splitOnComma = require('@mapbox/lambda-cfn').splitOnComma;
 module.exports.fn = function(event, context, callback) {
 
   var github = new GitHubApi({
-    version: "3.0.0"
+    version: '3.0.0'
   });
 
   var githubToken = process.env.githubToken;
@@ -18,12 +18,12 @@ module.exports.fn = function(event, context, callback) {
   var githubQuery = {
     org: githubOrganization,
     page: 1,
-    filter: "2fa_disabled"
+    filter: '2fa_disabled'
   };
 
   function getMembers(query,next) {
     github.authenticate({
-      type: "token",
+      type: 'token',
       token: githubToken
     });
     github.orgs.getMembers(query, function(err,res) {
@@ -49,7 +49,7 @@ module.exports.fn = function(event, context, callback) {
   function notify(next) {
     var notif;
 
-    var match = membersArray.filter(function (member){
+    var match = membersArray.filter(function(member){
       // returns members of Github organization who are **not** in the allowed list
       return !(allowedList.indexOf(member) > -1);
     });

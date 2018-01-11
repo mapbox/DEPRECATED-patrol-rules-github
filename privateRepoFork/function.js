@@ -1,5 +1,4 @@
 var message = require('@mapbox/lambda-cfn').message;
-var splitOnComma = require('@mapbox/lambda-cfn').splitOnComma;
 var util = require('util');
 
 module.exports.fn = function(event, context, callback) {
