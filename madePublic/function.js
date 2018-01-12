@@ -1,24 +1,23 @@
-var message = require('@mapbox/lambda-cfn').message;
-var util = require('util');
+const message = require('@mapbox/lambda-cfn').message;
 
-module.exports.fn = function(event, context, callback) {
-  if (event.zen != undefined) {
-    var ping = 'GitHub ping event received';
+module.exports.fn = (event, context, callback) => {
+  if (event.zen !== undefined) {
+    let ping = 'GitHub ping event received';
     console.log(ping);
     return callback(null, ping);
   } else {
     if (event.sender && event.repository && event.sender.login && event.repository.name) {
-      var notif = {
-        subject: (util.format('Private repository %s made public by %s', event.repository.name, event.sender.login)).substring(0, 100),
-        summary: util.format('The private repository %s was made by public by github user %s at %s\nRepo: %s\nUser: %s', event.repository.name, event.sender.login, event.repository.updated_at, event.repository.html_url, event.sender.html_url),
+      let notif = {
+        subject: (`Private repository ${event.repository.name} made public by ${event.sender.login}`).substring(0, 100),
+        summary: `The private repository ${event.repository.name} was made by public by github user ${event.sender.login} at ${event.repository.updated_at}\nRepo: ${event.repository.html_url}\nUser: ${event.sender.html_url}`,
         event: event
       };
-      message(notif, function(err, result) {
+      message(notif, (err, result) => {
         console.log(JSON.stringify(notif));
         return callback(err, result);
       });
     } else {
-      var badmsg = 'Error: unknown payload received';
+      let badmsg = 'Error: unknown payload received';
       console.log(badmsg);
       return callback(badmsg);
     }
