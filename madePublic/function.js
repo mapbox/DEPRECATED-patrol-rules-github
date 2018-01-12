@@ -4,7 +4,7 @@ module.exports.fn = (event, context, callback) => {
   let badMessage = 'Error: unknown payload received';
   let pingEventMessage = 'GitHub ping event received';
 
-  // Not a ping message
+  // Not a ping event
   if (event.zen === undefined) {
     if (event.sender && event.repository && event.sender.login && event.repository.name) {
       return notify(event, callback);
