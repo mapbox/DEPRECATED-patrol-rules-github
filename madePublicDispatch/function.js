@@ -1,5 +1,5 @@
 const lambdaCfn = require('@mapbox/lambda-cfn');
-const githubEvent = require('../lib/madePublic/event.js');
+const github = require('../lib/madePublic.js');
 
 function notify(event, callback) {
   let message = {
@@ -14,5 +14,5 @@ function notify(event, callback) {
 }
 
 module.exports.fn = (event, context, callback) => {
-  return githubEvent.madePublic(event, notify, callback);
+  return github.madePublic(event, notify, callback);
 };
