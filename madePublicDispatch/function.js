@@ -2,10 +2,12 @@ const AWS = require('aws-sdk');
 const github = require('../lib/madePublic/event.js');
 
 function notify(event, callback) {
-  let repoName = event.repository.name;
-  let githubUser = event.repository.sender.login;
-
   const sns = new AWS.SNS();
+
+  const repoName = event.repository.name;
+  const githubUser = event.repository.sender.login;
+  const dispatchSnsArn = process.env.dispatchSnsArn;
+
   const message = {
     type: 'self-service',
     retrigger: false,

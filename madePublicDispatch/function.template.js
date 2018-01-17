@@ -15,15 +15,6 @@ cfnTemplate.parameters = {
 cfnTemplate.statements = [
   {
     Effect: 'Allow',
-    Action: [
-      'kms:Decrypt'
-    ],
-    Resource: {
-      'Fn::ImportValue':'cloudformation-kms-production'
-    }
-  },
-  {
-    Effect: 'Allow',
     Action: 'sns:Publish',
     Resource: {
       Ref: 'dispatchSnsArn'
