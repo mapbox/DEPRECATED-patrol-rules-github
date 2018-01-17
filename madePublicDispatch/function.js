@@ -17,8 +17,8 @@ function notify(event, callback) {
     body: {
       github: {
         title: `${githubUser} made a ${repoName} repo public`,
-        body: `Hey there @${repoName} 👋 ! It looks like you made a ${repoName} repo public 
-
+        body: `Hey there @${githubUser} 👋 ! It looks like you made a ${repoName} repo public
+         
 Check the following list to ensure that the repo is not leaking sensitive information:
 
 * Check README and documentation for any Company-isms with sensitive information
