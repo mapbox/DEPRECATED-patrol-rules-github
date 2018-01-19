@@ -1,7 +1,15 @@
 const lambdaCfn = require('@mapbox/lambda-cfn');
-const cfnEventSources = require('../lib/madePublic/cfnEventSources');
 
-let cfnTemplate = cfnEventSources.eventSources;
-cfnTemplate.name = 'madePublic';
+
+let cfnTemplate = {
+  name: 'madePublic',
+  eventSources: {
+    webhook: {
+      method: 'POST',
+      apiKey: false
+    }
+  }
+};
+
 
 module.exports = lambdaCfn.build(cfnTemplate);
