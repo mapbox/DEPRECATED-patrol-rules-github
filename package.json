@@ -17,7 +17,7 @@
     "github": "0.2.4",
     "d3-queue": "^3.0.0",
     "aws-sdk": "^2.123.0",
-    "@mapbox/lambda-cfn": "^2.0.0"
+    "@mapbox/lambda-cfn": "git@github.com:mapbox/lambda-cfn.git#616a1fd298bdca2d0ed879c5d7d95e8b6a9d7b92"
   },
   "scripts": {
     "test": "eslint **/*.js && NODE_ENV=test tape test/*.test.js test/**/*.test.js",
