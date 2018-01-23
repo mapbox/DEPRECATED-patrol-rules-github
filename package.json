@@ -16,7 +16,7 @@
   "dependencies": {
     "github": "0.2.4",
     "d3-queue": "^3.0.0",
-    "@mapbox/lambda-cfn": "git@github.com:mapbox/lambda-cfn.git#616a1fd298bdca2d0ed879c5d7d95e8b6a9d7b92"
+    "@mapbox/lambda-cfn": "git@github.com:mapbox/lambda-cfn.git#e6157d37856c25ca8cc964450885d516069ed43f"
   },
   "scripts": {
     "test": "eslint **/*.js && NODE_ENV=test tape test/*.test.js test/**/*.test.js",
