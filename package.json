@@ -16,7 +16,7 @@
   "dependencies": {
     "github": "0.2.4",
     "d3-queue": "^3.0.0",
-    "@mapbox/lambda-cfn": "git+https://mapbox/patrol-rules-github.git#feature/DispatchServiceSnsArn-support"
+    "@mapbox/lambda-cfn": "git+https://mapbox/lambda-cfn.git#feature/DispatchServiceSnsArn-support"
   },
   "scripts": {
     "test": "eslint **/*.js && NODE_ENV=test tape test/*.test.js test/**/*.test.js",
