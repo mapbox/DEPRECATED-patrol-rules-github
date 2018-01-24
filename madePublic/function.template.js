@@ -1,6 +1,5 @@
 const lambdaCfn = require('@mapbox/lambda-cfn');
 
-
 let cfnTemplate = {
   name: 'madePublic',
   eventSources: {
@@ -10,6 +9,5 @@ let cfnTemplate = {
     }
   }
 };
-
 
 module.exports = lambdaCfn.build(cfnTemplate);
