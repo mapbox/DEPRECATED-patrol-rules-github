@@ -16,7 +16,7 @@
   "dependencies": {
     "github": "0.2.4",
     "d3-queue": "^3.0.0",
-    "@mapbox/lambda-cfn": "^2.0.0"
+    "@mapbox/lambda-cfn": "3.0.0"
   },
   "scripts": {
     "test": "eslint **/*.js && NODE_ENV=test tape test/*.test.js test/**/*.test.js",
