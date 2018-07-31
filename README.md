@@ -29,6 +29,7 @@ The following functions are included with patrol-rules-github. Each function is 
   - none
 - **Outputs**
   - Webhook URL
+- **Github Hooks** - Enable *Visibility changes* and *Repositories events* events.
 
 ### privateRepoFork
 
