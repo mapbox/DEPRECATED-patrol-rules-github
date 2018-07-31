@@ -68,7 +68,7 @@ var createdPrivateHookEvent = {
     name: 'good-repo',
     html_url: 'https://github.com/test/testproject',
     updated_at: '2011-11-11T11:11:11Z',
-    private: false
+    private: true
   },
   sender: {
     login: 'testuser',
@@ -143,7 +143,7 @@ test('It should trigger a message when the repo is not created', function(t) {
   });
 });
 
-test('It should trigger a message when the repo is not created', function(t) {
+test('It should trigger a message when a public repo is created', function(t) {
   rule.fn(createdPublicHookEvent, {}, function(err, message) {
     t.error(err, 'does not error');
     t.equal(message.subject, 'Private repository good-repo made public by testuser');
@@ -151,10 +151,10 @@ test('It should trigger a message when the repo is not created', function(t) {
   });
 });
 
-test('It should trigger a message when the repo is not created', function(t) {
-  rule.fn(createdPrivateHookEvent, {}, function(err, _message) {
+test('It should not trigger a message when a private repo is created', function(t) {
+  rule.fn(createdPrivateHookEvent, {}, function(err, message) {
     t.error(err, 'does not error');
-    t.error(err, 'Error: unknown payload received');
+    t.equal(message, 'The repository good-repo is private');
     t.end();
   });
 });
