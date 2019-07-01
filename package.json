@@ -1,7 +1,7 @@
 {
   "license": "BSD-2-Clause",
   "engines": {
-    "node": "6.10.2"
+    "node": ">=10.13.0"
   },
   "name": "patrol-rules-github",
   "repository": {
@@ -27,7 +27,7 @@
     "eslint": "^6.0.1",
     "eslint-config-unstyled": "^1.1.0",
     "nock": "^10.0.6",
-    "tape": "^4.10.2"
+    "tape": "^4.11.0"
   },
   "homepage": "https://github.com/mapbox/patrol-rules-github",
   "description": "GitHub Patrol rules"
