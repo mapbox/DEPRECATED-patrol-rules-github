@@ -1,5 +1,6 @@
 var test = require('tape');
 var nock = require('nock');
+var AWS = require('@mapbox/mock-aws-sdk-js');
 
 var rule = require('../mfaDisabled/function.js');
 var fn = rule.fn;
@@ -97,7 +98,10 @@ function getMembersNock() {
 };
 
 getMembersNock();
-test('2fa single user disabled', function(t) {
+test.only('2fa single user disabled', function(t) {
+  var snsStub = AWS.stub('SNS', 'publish', function(params) {
+    this.request.promise.returns(Promise.resolve({}));
+  });
   var event = 'foo';
   process.env.allowedList = 'jeff, carol, zach';
   fn(event, {}, function(err, message) {
@@ -105,6 +109,7 @@ test('2fa single user disabled', function(t) {
     t.error(err, 'No error when calling function');
     t.equal(subject, 'User ian has disabled 2FA on their Github account', 'Rule detected disabling of 2FA on a single Github user account');
     t.end();
+    snsStub.restore();
   });
 });
 

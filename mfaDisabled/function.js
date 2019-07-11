@@ -78,11 +78,9 @@ module.exports.fn = function(event, context, callback) {
       Message: notif.summary + '\n' + notif.event,
       TopicArn: process.env.PatrolAlarmTopic
     };
-    return new Promise((resolve, reject) => {
-      sns.publish(message).promise()
-        .then(() => resolve())
-        .catch((err) => reject(err));
-    });
+    sns.publish(message).promise()
+      .then(() => next())
+      .catch((err) => next(err));
   }
 
   q.defer(getMembers,githubQuery);
