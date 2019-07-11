@@ -2,6 +2,7 @@ var GitHubApi = require('github');
 var message = require('@mapbox/lambda-cfn').message;
 var d3 = require('d3-queue');
 var splitOnComma = require('@mapbox/lambda-cfn').splitOnComma;
+var AWS = require('aws-sdk');
 
 module.exports.fn = function(event, context, callback) {
 
@@ -47,35 +48,41 @@ module.exports.fn = function(event, context, callback) {
   }
 
   function notify(next) {
-    var notif;
+    if (!process.env.PatrolAlarmTopic) return Promise.reject(new Error('Missing ENV PatrolAlarmTopic'));
+    let notif;
 
-    var match = membersArray.filter(function(member){
+    const match = membersArray.filter(function(member){
       // returns members of Github organization who are **not** in the allowed list
       return !(allowedList.indexOf(member) > -1);
     });
 
-    if (match.length > 0) {
-      if (match.length === 1) {
-        notif = {
-          subject: 'User ' + match[0] + ' has disabled 2FA on their Github account',
-          summary: 'User ' + match[0] + ' has disabled 2FA on their Github account',
-          event: match
-        };
-      }
-      if (match.length > 1) {
-        notif = {
-          subject: 'Multiple users have disabled 2FA on their Github accounts',
-          summary: 'The following users have disabled 2FA on their Github account:\n' + match.join('\n') + '\n',
-          event: match
-        };
-      }
-      message(notif, function(err, result) {
-        if (err) return next(err);
-        next(null, result);
-      });
-    } else {
-      next(null, '2FA was not disabled on any Github accounts');
+    if (match.length === 0) return Promise.resolve('2FA was not disabled on any Github accounts');
+    if (match.length === 1) {
+      notif = {
+        subject: 'User ' + match[0] + ' has disabled 2FA on their Github account',
+        summary: 'User ' + match[0] + ' has disabled 2FA on their Github account',
+        event: match
+      };
     }
+    if (match.length > 1) {
+      notif = {
+        subject: 'Multiple users have disabled 2FA on their Github accounts',
+        summary: 'The following users have disabled 2FA on their Github account:\n' + match.join('\n') + '\n',
+        event: match
+      };
+    }
+
+    const sns = new AWS.SNS({ region: 'us-east-1' });
+    const message = {
+      Subject: notif.subject,
+      Message: notif.summary + '\n' + notif.event,
+      TopicArn: process.env.PatrolAlarmTopic
+    };
+    return new Promise((resolve, reject) => {
+      sns.publish(message).promise()
+        .then(() => resolve())
+        .catch((err) => reject(err));
+    });
   }
 
   q.defer(getMembers,githubQuery);

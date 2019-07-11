@@ -14,7 +14,10 @@
   },
   "version": "1.0.0",
   "dependencies": {
+    "@mapbox/cloudfriend": "^3.1.1",
     "@mapbox/lambda-cfn": "^3.1.0",
+    "@mapbox/magic-cfn-resources": "^1.9.0",
+    "aws-sdk": "^2.491.0",
     "d3-queue": "^3.0.0",
     "github": "0.2.4"
   },
@@ -24,6 +27,7 @@
     "unit-test": "NODE_ENV=test tape test/*.test.js test/**/*.test.js"
   },
   "devDependencies": {
+    "@mapbox/mock-aws-sdk-js": "^1.0.0",
     "eslint": "^6.0.1",
     "eslint-config-unstyled": "^1.1.0",
     "nock": "^10.0.6",

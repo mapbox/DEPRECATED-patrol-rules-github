@@ -6,6 +6,7 @@ var fn = rule.fn;
 
 process.env.githubOrganization = 'mapbox';
 process.env.githubToken = 'fakefakefakefake';
+process.env.PatrolAlarmTopic = 'test-topic';
 
 var githubOrg = process.env.githubOrganization;
 
