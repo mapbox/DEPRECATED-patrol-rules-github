@@ -1,6 +1,5 @@
 var GitHubApi = require('github');
 var message = require('@mapbox/lambda-cfn').message;
-var d3 = require('d3-queue');
 var splitOnComma = require('@mapbox/lambda-cfn').splitOnComma;
 var AWS = require('aws-sdk');
 
@@ -13,7 +12,6 @@ module.exports.fn = function(event, context, callback) {
   var githubToken = process.env.githubToken;
   var githubOrganization = process.env.githubOrganization;
   var allowedList = splitOnComma(process.env.allowedList);
-  var q = d3.queue(1);
   var membersArray = [];
 
   var githubQuery = {
@@ -22,32 +20,32 @@ module.exports.fn = function(event, context, callback) {
     filter: '2fa_disabled'
   };
 
-  function getMembers(query, next) {
+  function getMembers(query) {
     github.authenticate({
       type: 'token',
       token: githubToken
     });
-    github.orgs.getMembers(query, function(err, res) {
-      if (err) {
-        return next(err);
-      }
-      var members = res;
-      members.filter(function(member) {
-        membersArray.push(member.login);
-      });
-      if (github.hasNextPage(res)) {
-        if (query.page == undefined) {
-          query.page = 1;
-        }
-        query.page = query.page + 1;
-        getMembers(query, next);
-      } else {
-        return next();
-      }
+    return new Promise((resolve, reject) => {
+      github.orgs.getMembers(query)
+        .then((res) => {
+          var members = res;
+          members.filter(function(member) {
+            membersArray.push(member.login);
+          });
+          if (github.hasNextPage(res)) {
+            if (query.page == undefined) {
+              query.page = 1;
+            }
+            query.page = query.page + 1;
+            getMembers(query);
+          }
+        })
+        .then(() => resolve())
+        .catch((err) => reject(err));
     });
   }
 
-  function notify(next) {
+  function notify() {
     if (!process.env.PatrolAlarmTopic) return Promise.reject(new Error('Missing ENV PatrolAlarmTopic'));
     let notif;
 
@@ -56,7 +54,7 @@ module.exports.fn = function(event, context, callback) {
       return !(allowedList.indexOf(member) > -1);
     });
 
-    if (match.length === 0) return Promise.resolve('2FA was not disabled on any Github accounts');
+    if (match.length === 0) return Promise.resolve(null, '2FA was not disabled on any Github accounts');
     if (match.length === 1) {
       notif = {
         subject: 'User ' + match[0] + ' has disabled 2FA on their Github account',
@@ -78,15 +76,16 @@ module.exports.fn = function(event, context, callback) {
       Message: notif.summary + '\n' + notif.event,
       TopicArn: process.env.PatrolAlarmTopic
     };
-    sns.publish(message).promise()
-      .then(() => next())
-      .catch((err) => next(err));
+    return Promise.resolve(null);
+    //    sns.publish(message).promise()
+    //      .then(() => next(nullj))
+    //      .catch((err) => next(err));
   }
 
-  q.defer(getMembers,githubQuery);
-  q.defer(notify);
-  q.awaitAll(function(err, res) {
-    if (err) {
+  getMembers(githubQuery)
+    .then((query) => notify(query))
+    .then(() => callback())
+    .catch((err) => {
       var notif = {
         subject: 'Error: Github 2FA check',
         summary: err
@@ -95,8 +94,5 @@ module.exports.fn = function(event, context, callback) {
       message(notif, function(err, result) {
         return callback(err, result);
       });
-    }
-    console.log(res[1]);
-    callback(err, res[1]);
-  });
+    });
 };
