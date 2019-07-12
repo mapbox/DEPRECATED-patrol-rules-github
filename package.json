@@ -22,7 +22,7 @@
     "github": "0.2.4"
   },
   "scripts": {
-    "test": "NODE_ENV=test tape test/*.test.js test/**/*.test.js && eslint **/*.js",
+    "test": "eslint **/*.js && NODE_ENV=test tape test/*.test.js test/**/*.test.js",
     "lint": "eslint **/*.js",
     "unit-test": "NODE_ENV=test tape test/*.test.js test/**/*.test.js"
   },
