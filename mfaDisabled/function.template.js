@@ -26,7 +26,14 @@ const lambdaTemplate = lambdaCfn.build({
     schedule: {
       expression: 'rate(5 minutes)'
     }
-  }
+  },
+  statements: [
+    {
+      Effect: 'Allow',
+      Action: ['sns:Publish'],
+      Resource: cf.ref('PatrolAlarmTopic')
+    }
+  ]
 });
 
 const lambda = lambdaTemplate.Resources['mfaDisabled'].Properties;
