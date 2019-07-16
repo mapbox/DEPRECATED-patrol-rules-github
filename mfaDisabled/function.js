@@ -56,8 +56,8 @@ module.exports.fn = function(event, context, callback) {
       return !(allowedList.indexOf(member) > -1);
     });
 
-    if (match.length === 0) return Promise.resolve('2FA was not disabled on any Github accounts');
-    if (match.length === 1) {
+//    if (match.length === 0) return Promise.resolve('2FA was not disabled on any Github accounts');
+    if (match.length <= 1) {
       notif = {
         subject: 'User ' + match[0] + ' has disabled 2FA on their Github account',
         summary: 'User ' + match[0] + ' has disabled 2FA on their Github account',
