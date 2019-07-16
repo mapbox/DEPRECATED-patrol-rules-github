@@ -1,11 +1,13 @@
 var test = require('tape');
 var nock = require('nock');
+var AWS = require('@mapbox/mock-aws-sdk-js');
 
 var rule = require('../mfaDisabled/function.js');
 var fn = rule.fn;
 
 process.env.githubOrganization = 'mapbox';
 process.env.githubToken = 'fakefakefakefake';
+process.env.PatrolAlarmTopic = 'test-topic';
 
 var githubOrg = process.env.githubOrganization;
 
@@ -97,24 +99,30 @@ function getMembersNock() {
 
 getMembersNock();
 test('2fa single user disabled', function(t) {
+  var snsStub = AWS.stub('SNS', 'publish', function(params) {
+    t.equal(params.Subject, 'User ian has disabled 2FA on their Github account', 'Rule detected disabling of 2FA on a single Github user account');
+    this.request.promise.returns(Promise.resolve({}));
+  });
   var event = 'foo';
   process.env.allowedList = 'jeff, carol, zach';
-  fn(event, {}, function(err, message) {
-    var subject = message.subject;
+  fn(event, {}, function(err) {
     t.error(err, 'No error when calling function');
-    t.equal(subject, 'User ian has disabled 2FA on their Github account', 'Rule detected disabling of 2FA on a single Github user account');
     t.end();
+    snsStub.restore();
   });
 });
 
 getMembersNock();
 test('2fa multiple users disabled', function(t) {
+  var snsStub = AWS.stub('SNS', 'publish', function(params) {
+    t.equal(params.Subject, 'Multiple users have disabled 2FA on their Github accounts', 'Rule detected disabling of 2FA on multiple Github user accounts');
+    this.request.promise.returns(Promise.resolve({}));
+  });
   var event = 'foo';
   process.env.allowedList = 'jeff, carol';
-  fn(event, {}, function(err, message){
-    var subject = message.subject;
+  fn(event, {}, function(err){
     t.error(err, 'No error when calling function');
-    t.equal(subject, 'Multiple users have disabled 2FA on their Github accounts', 'Rule detected disabling of 2FA on multiple Github user accounts');
     t.end();
+    snsStub.restore();
   });
 });
