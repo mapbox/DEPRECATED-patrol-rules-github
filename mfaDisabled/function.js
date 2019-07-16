@@ -56,13 +56,19 @@ module.exports.fn = function(event, context, callback) {
       return !(allowedList.indexOf(member) > -1);
     });
 
-    if (match.length === 0) return Promise.resolve('2FA was not disabled on any Github accounts');
+    if (match.length === 0) {
+      console.log('2FA was not disabled on any Github accounts');
+      return Promise.resolve({});
+    }
     if (match.length === 1) {
+
       notif = {
         subject: 'User ' + match[0] + ' has disabled 2FA on their Github account',
         summary: 'User ' + match[0] + ' has disabled 2FA on their Github account',
         event: match
       };
+
+      console.log(notif.subject);
     }
     if (match.length > 1) {
       notif = {
@@ -70,8 +76,11 @@ module.exports.fn = function(event, context, callback) {
         summary: 'The following users have disabled 2FA on their Github account:\n' + match.join('\n') + '\n',
         event: match
       };
+      console.log(notif.subject);
+      console.log(notif.summary);
     }
 
+    console.log('Notifying patrol alert of detected users...');
     const sns = new AWS.SNS({ region: 'us-east-1' });
     const message = {
       Subject: notif.subject,
