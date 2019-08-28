@@ -13,8 +13,6 @@ module.exports.fn = async function() {
 
   const githubOrganization = process.env.githubOrganization;
   const allowedList = splitOnComma(process.env.allowedList);
-  const membersArray = [];
-
   const githubQuery = {
     org: githubOrganization,
     page: 1,
@@ -24,10 +22,8 @@ module.exports.fn = async function() {
   try {
     const listMembersOptions = githubClient.orgs.listMembers.endpoint.merge(githubQuery);
     const listMembersResponse = await githubClient.paginate(listMembersOptions);
-    listMembersResponse.filter((member) => {  // TODO: why filter?
-      membersArray.push(member.login);
-    });
-    await notify();
+    const memberLogins = listMembersResponse.map((member) => member.login);
+    await notify(memberLogins);
   } catch (err) {
     const notif = {
       subject: 'Error: Github 2FA check',
@@ -42,12 +38,11 @@ module.exports.fn = async function() {
     });
   }
 
-  // TODO: is this okay here?
-  async function notify() {
+  async function notify(members) {
     if (!process.env.PatrolAlarmTopic) return Promise.reject(new Error('Missing ENV PatrolAlarmTopic'));
     let notif;
 
-    const match = membersArray.filter((member) => {
+    const match = members.filter((member) => {
       // returns members of Github organization who are **not** in the allowed list
       return !(allowedList.indexOf(member) > -1);
     });
