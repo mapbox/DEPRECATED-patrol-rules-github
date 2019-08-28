@@ -1,20 +1,21 @@
-var github = require('@octokit/rest');
-var message = require('@mapbox/lambda-cfn').message;
-var splitOnComma = require('@mapbox/lambda-cfn').splitOnComma;
-var AWS = require('aws-sdk');
+'use strict';
+const github = require('@octokit/rest');
+const message = require('@mapbox/lambda-cfn').message;
+const splitOnComma = require('@mapbox/lambda-cfn').splitOnComma;
+const AWS = require('aws-sdk');
 
 module.exports.fn = async function() {
 
-  var githubClient = github({
+  const githubClient = github({
     version: '3.0.0',
     auth: `token ${process.env.githubToken}`
   });
 
-  var githubOrganization = process.env.githubOrganization;
-  var allowedList = splitOnComma(process.env.allowedList);
-  var membersArray = [];
+  const githubOrganization = process.env.githubOrganization;
+  const allowedList = splitOnComma(process.env.allowedList);
+  const membersArray = [];
 
-  var githubQuery = {
+  const githubQuery = {
     org: githubOrganization,
     page: 1,
     filter: '2fa_disabled'
@@ -28,12 +29,12 @@ module.exports.fn = async function() {
     });
     await notify();
   } catch (err) {
-    var notif = {
+    const notif = {
       subject: 'Error: Github 2FA check',
       summary: err
     };
     console.log(err);
-    message(notif, function(err, result) {
+    message(notif, (err, result) => {
       if (err) {
         throw err;
       }
@@ -46,7 +47,7 @@ module.exports.fn = async function() {
     if (!process.env.PatrolAlarmTopic) return Promise.reject(new Error('Missing ENV PatrolAlarmTopic'));
     let notif;
 
-    const match = membersArray.filter(function(member){
+    const match = membersArray.filter((member) => {
       // returns members of Github organization who are **not** in the allowed list
       return !(allowedList.indexOf(member) > -1);
     });

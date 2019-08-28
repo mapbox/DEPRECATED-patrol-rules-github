@@ -27,11 +27,15 @@
     "unit-test": "NODE_ENV=test tape test/*.test.js test/**/*.test.js"
   },
   "devDependencies": {
+    "@mapbox/eslint-config-mapbox": "^2.0.1",
     "@mapbox/mock-aws-sdk-js": "^1.0.0",
-    "eslint": "^6.0.1",
-    "eslint-config-unstyled": "^1.1.0",
+    "eslint": "^6.2.2",
+    "eslint-plugin-node": "^9.1.0",
     "nock": "^10.0.6",
     "tape": "^4.11.0"
+  },
+  "eslintConfig": {
+    "extends": "@mapbox/eslint-config-mapbox"
   },
   "homepage": "https://github.com/mapbox/patrol-rules-github",
   "description": "GitHub Patrol rules"

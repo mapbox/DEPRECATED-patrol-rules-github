@@ -1,17 +1,17 @@
-var test = require('tape');
-var nock = require('nock');
-var AWS = require('@mapbox/mock-aws-sdk-js');
+'use strict';
+const test = require('tape');
+const nock = require('nock');
+const AWS = require('@mapbox/mock-aws-sdk-js');
 
-var rule = require('../mfaDisabled/function.js');
-var fn = rule.fn;
+const fn = require('../mfaDisabled/function.js').fn;
 
 process.env.githubOrganization = 'mapbox';
 process.env.githubToken = 'fakefakefakefake';
 process.env.PatrolAlarmTopic = 'test-topic';
 
-var githubOrg = process.env.githubOrganization;
+const githubOrg = process.env.githubOrganization;
 
-var response = [
+const response = [
   {
     login: 'jeff',
     id: 1234567,
@@ -91,15 +91,15 @@ var response = [
 ];
 
 function setupMembersNock() {
-  nock('https://api.github.com:443', {'encodedQueryParams': true})
+  nock('https://api.github.com:443', { 'encodedQueryParams': true })
     .get('/orgs/' + githubOrg + '/members')
-    .query({filter: '2fa_disabled', page: 1})
+    .query({ filter: '2fa_disabled', page: 1 })
     .reply(200, response);
-};
+}
 
-test('2fa single user disabled', async function(t) {
+test('2fa single user disabled', async (t) => {
   setupMembersNock();
-  var snsStub = AWS.stub('SNS', 'publish', function(params) {
+  const snsStub = AWS.stub('SNS', 'publish', function(params) {
     t.equal(params.Subject, 'User ian has disabled 2FA on their Github account', 'Rule detected disabling of 2FA on a single Github user account');
     this.request.promise.returns(Promise.resolve({}));
   });
@@ -115,9 +115,9 @@ test('2fa single user disabled', async function(t) {
   }
 });
 
-test('2fa multiple users disabled', async function(t) {
+test('2fa multiple users disabled', async (t) => {
   setupMembersNock();
-  var snsStub = AWS.stub('SNS', 'publish', function(params) {
+  const snsStub = AWS.stub('SNS', 'publish', function(params) {
     t.equal(params.Subject, 'Multiple users have disabled 2FA on their Github accounts', 'Rule detected disabling of 2FA on multiple Github user accounts');
     this.request.promise.returns(Promise.resolve({}));
   });
