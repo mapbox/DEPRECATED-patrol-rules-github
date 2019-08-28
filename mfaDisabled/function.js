@@ -6,11 +6,12 @@ var AWS = require('aws-sdk');
 
 module.exports.fn = function(event, context, callback) {
 
+  console.log('starting function');
   var github = new GitHubApi({
-    version: '3.0.0'
+    version: '3.0.0',
+    auth: `token ${process.env.githubToken}`
   });
 
-  var githubToken = process.env.githubToken;
   var githubOrganization = process.env.githubOrganization;
   var allowedList = splitOnComma(process.env.allowedList);
   var q = d3.queue(1);
@@ -22,12 +23,16 @@ module.exports.fn = function(event, context, callback) {
     filter: '2fa_disabled'
   };
 
+
+  console.log('set up github clients');
+
   function getMembers(query, next) {
-    github.authenticate({
-      type: 'token',
-      token: githubToken
-    });
-    github.orgs.getMembers(query, function(err, res) {
+    github.orgs.listMembers(query, function(err, res) {
+      console.log('inside listMembers');
+      console.log(err);
+      callback(null);
+      /**
+      console.log(res);
       if (err) {
         return next(err);
       }
@@ -44,6 +49,8 @@ module.exports.fn = function(event, context, callback) {
       } else {
         return next();
       }
+
+      **/
     });
   }
 
