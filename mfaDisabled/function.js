@@ -1,20 +1,17 @@
-var GitHubApi = require('@octokit/rest');
+var github = require('@octokit/rest');
 var message = require('@mapbox/lambda-cfn').message;
-var d3 = require('d3-queue');
 var splitOnComma = require('@mapbox/lambda-cfn').splitOnComma;
 var AWS = require('aws-sdk');
 
-module.exports.fn = function(event, context, callback) {
+module.exports.fn = async function() {
 
-  console.log('starting function');
-  var github = new GitHubApi({
+  var githubClient = github({
     version: '3.0.0',
     auth: `token ${process.env.githubToken}`
   });
 
   var githubOrganization = process.env.githubOrganization;
   var allowedList = splitOnComma(process.env.allowedList);
-  var q = d3.queue(1);
   var membersArray = [];
 
   var githubQuery = {
@@ -23,38 +20,29 @@ module.exports.fn = function(event, context, callback) {
     filter: '2fa_disabled'
   };
 
-
-  console.log('set up github clients');
-
-  function getMembers(query, next) {
-    github.orgs.listMembers(query, function(err, res) {
-      console.log('inside listMembers');
-      console.log(err);
-      callback(null);
-      /**
-      console.log(res);
+  try {
+    const listMembersOptions = githubClient.orgs.listMembers.endpoint.merge(githubQuery);
+    const listMembersResponse = await githubClient.paginate(listMembersOptions);
+    listMembersResponse.filter((member) => {  // TODO: why filter?
+      membersArray.push(member.login);
+    });
+    await notify();
+  } catch (err) {
+    var notif = {
+      subject: 'Error: Github 2FA check',
+      summary: err
+    };
+    console.log(err);
+    message(notif, function(err, result) {
       if (err) {
-        return next(err);
+        throw err;
       }
-      var members = res;
-      members.filter(function(member) {
-        membersArray.push(member.login);
-      });
-      if (github.hasNextPage(res)) {
-        if (query.page == undefined) {
-          query.page = 1;
-        }
-        query.page = query.page + 1;
-        getMembers(query, next);
-      } else {
-        return next();
-      }
-
-      **/
+      return result;
     });
   }
 
-  function notify(next) {
+  // TODO: is this okay here?
+  async function notify() {
     if (!process.env.PatrolAlarmTopic) return Promise.reject(new Error('Missing ENV PatrolAlarmTopic'));
     let notif;
 
@@ -94,25 +82,6 @@ module.exports.fn = function(event, context, callback) {
       Message: notif.summary + '\n' + notif.event,
       TopicArn: process.env.PatrolAlarmTopic
     };
-    sns.publish(message).promise()
-      .then(() => next())
-      .catch((err) => next(err));
+    return sns.publish(message).promise();
   }
-
-  q.defer(getMembers,githubQuery);
-  q.defer(notify);
-  q.awaitAll(function(err, res) {
-    if (err) {
-      var notif = {
-        subject: 'Error: Github 2FA check',
-        summary: err
-      };
-      console.log(err);
-      message(notif, function(err, result) {
-        return callback(err, result);
-      });
-    }
-    console.log(res[1]);
-    callback(err, res[1]);
-  });
 };

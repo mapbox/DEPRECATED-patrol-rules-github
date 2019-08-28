@@ -90,39 +90,45 @@ var response = [
   }
 ];
 
-function getMembersNock() {
+function setupMembersNock() {
   nock('https://api.github.com:443', {'encodedQueryParams': true})
     .get('/orgs/' + githubOrg + '/members')
     .query({filter: '2fa_disabled', page: 1})
     .reply(200, response);
 };
 
-getMembersNock();
-test('2fa single user disabled', function(t) {
+test('2fa single user disabled', async function(t) {
+  setupMembersNock();
   var snsStub = AWS.stub('SNS', 'publish', function(params) {
     t.equal(params.Subject, 'User ian has disabled 2FA on their Github account', 'Rule detected disabling of 2FA on a single Github user account');
     this.request.promise.returns(Promise.resolve({}));
   });
-  var event = 'foo';
   process.env.allowedList = 'jeff, carol, zach';
-  fn(event, {}, function(err) {
-    t.error(err, 'No error when calling function');
-    t.end();
+
+  try {
+    await fn();
+  } catch (err) {
+    t.ifError(err, 'No error when calling function');
+  } finally {
     snsStub.restore();
-  });
+    t.end();
+  }
 });
 
-getMembersNock();
-test('2fa multiple users disabled', function(t) {
+test('2fa multiple users disabled', async function(t) {
+  setupMembersNock();
   var snsStub = AWS.stub('SNS', 'publish', function(params) {
     t.equal(params.Subject, 'Multiple users have disabled 2FA on their Github accounts', 'Rule detected disabling of 2FA on multiple Github user accounts');
     this.request.promise.returns(Promise.resolve({}));
   });
-  var event = 'foo';
   process.env.allowedList = 'jeff, carol';
-  fn(event, {}, function(err){
-    t.error(err, 'No error when calling function');
-    t.end();
+
+  try {
+    await fn();
+  } catch (err) {
+    t.ifError(err, 'No error when calling function');
+  } finally {
     snsStub.restore();
-  });
+    t.end();
+  }
 });
