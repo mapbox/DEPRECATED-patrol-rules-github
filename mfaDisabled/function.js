@@ -1,4 +1,4 @@
-var GitHubApi = require('github');
+var GitHubApi = require('@octokit/rest');
 var message = require('@mapbox/lambda-cfn').message;
 var d3 = require('d3-queue');
 var splitOnComma = require('@mapbox/lambda-cfn').splitOnComma;
