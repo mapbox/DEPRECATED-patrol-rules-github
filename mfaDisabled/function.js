@@ -1,57 +1,48 @@
-var GitHubApi = require('github');
-var message = require('@mapbox/lambda-cfn').message;
-var d3 = require('d3-queue');
-var splitOnComma = require('@mapbox/lambda-cfn').splitOnComma;
-var AWS = require('aws-sdk');
+'use strict';
+const github = require('@octokit/rest');
+const message = require('@mapbox/lambda-cfn').message;
+const splitOnComma = require('@mapbox/lambda-cfn').splitOnComma;
+const AWS = require('aws-sdk');
 
-module.exports.fn = function(event, context, callback) {
+module.exports.fn = async function() {
 
-  var github = new GitHubApi({
-    version: '3.0.0'
+  const githubClient = github({
+    version: '3.0.0',
+    auth: `token ${process.env.githubToken}`
   });
 
-  var githubToken = process.env.githubToken;
-  var githubOrganization = process.env.githubOrganization;
-  var allowedList = splitOnComma(process.env.allowedList);
-  var q = d3.queue(1);
-  var membersArray = [];
-
-  var githubQuery = {
+  const githubOrganization = process.env.githubOrganization;
+  const allowedList = splitOnComma(process.env.allowedList);
+  const githubQuery = {
     org: githubOrganization,
     page: 1,
     filter: '2fa_disabled'
   };
 
-  function getMembers(query, next) {
-    github.authenticate({
-      type: 'token',
-      token: githubToken
-    });
-    github.orgs.getMembers(query, function(err, res) {
+  try {
+    const listMembersOptions = githubClient.orgs.listMembers.endpoint.merge(githubQuery);
+    const listMembersResponse = await githubClient.paginate(listMembersOptions);
+    const memberLogins = listMembersResponse.map((member) => member.login);
+    await notify(memberLogins);
+  } catch (err) {
+    const notif = {
+      subject: 'Error: Github 2FA check',
+      summary: err
+    };
+    console.log(err);
+    message(notif, (err, result) => {
       if (err) {
-        return next(err);
+        throw err;
       }
-      var members = res;
-      members.filter(function(member) {
-        membersArray.push(member.login);
-      });
-      if (github.hasNextPage(res)) {
-        if (query.page == undefined) {
-          query.page = 1;
-        }
-        query.page = query.page + 1;
-        getMembers(query, next);
-      } else {
-        return next();
-      }
+      return result;
     });
   }
 
-  function notify(next) {
+  async function notify(members) {
     if (!process.env.PatrolAlarmTopic) return Promise.reject(new Error('Missing ENV PatrolAlarmTopic'));
     let notif;
 
-    const match = membersArray.filter(function(member){
+    const match = members.filter((member) => {
       // returns members of Github organization who are **not** in the allowed list
       return !(allowedList.indexOf(member) > -1);
     });
@@ -87,25 +78,6 @@ module.exports.fn = function(event, context, callback) {
       Message: notif.summary + '\n' + notif.event,
       TopicArn: process.env.PatrolAlarmTopic
     };
-    sns.publish(message).promise()
-      .then(() => next())
-      .catch((err) => next(err));
+    return sns.publish(message).promise();
   }
-
-  q.defer(getMembers,githubQuery);
-  q.defer(notify);
-  q.awaitAll(function(err, res) {
-    if (err) {
-      var notif = {
-        subject: 'Error: Github 2FA check',
-        summary: err
-      };
-      console.log(err);
-      message(notif, function(err, result) {
-        return callback(err, result);
-      });
-    }
-    console.log(res[1]);
-    callback(err, res[1]);
-  });
 };

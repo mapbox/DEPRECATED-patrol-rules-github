@@ -1,3 +1,4 @@
+'use strict';
 const lambdaCfn = require('@mapbox/lambda-cfn');
 const cf = require('@mapbox/cloudfriend');
 const mfn = require('@mapbox/magic-cfn-resources');
@@ -51,7 +52,7 @@ const alarmResources = {
           }
         ]
       }
-    },
+    }
   }
 };
 

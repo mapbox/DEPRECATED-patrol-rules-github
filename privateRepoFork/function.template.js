@@ -1,3 +1,4 @@
+'use strict';
 const lambdaCfn = require('@mapbox/lambda-cfn');
 
 const lambdaTemplate = lambdaCfn.build({

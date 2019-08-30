@@ -1,7 +1,8 @@
-var test = require('tape');
-var rule = require('../privateRepoFork/function.js');
+'use strict';
+const test = require('tape');
+const rule = require('../privateRepoFork/function.js');
 
-var privateFork = {
+const privateFork = {
   forkee: {
     name: 'forked-repo',
     updated_at: '2011-11-11T11:11:11Z',
@@ -18,7 +19,7 @@ var privateFork = {
   }
 };
 
-var publicFork = {
+const publicFork = {
   forkee: {
     name: 'forked-repo',
     updated_at: '2011-11-11T11:11:11Z',
@@ -35,7 +36,7 @@ var publicFork = {
   }
 };
 
-var badPrivateFork = {
+const badPrivateFork = {
   forkee: {
     name: '',
     updated_at: '2011-11-11T11:11:11Z',
@@ -52,47 +53,47 @@ var badPrivateFork = {
   }
 };
 
-var githubPing = {
+const githubPing = {
   zen: 'test'
 };
 
-var goodResponse = 'Private repository good-repo forked by defunkt';
+const goodResponse = 'Private repository good-repo forked by defunkt';
 
-var publicResponse = 'Public repository public-repo forked by defunkt';
+const publicResponse = 'Public repository public-repo forked by defunkt';
 
-test('GitHub ping', {}, function(t) {
-  rule.fn(githubPing, {}, function(err, message) {
+test('GitHub ping', {}, (t) => {
+  rule.fn(githubPing, {}, (err, message) => {
     t.error(err, 'does not error');
     t.equal(message,'GitHub ping event received');
     t.end();
   });
 });
 
-test('Unknown payload', {}, function(t) {
-  rule.fn({random: 'payload'}, {}, function(err, _message) {
+test('Unknown payload', {}, (t) => {
+  rule.fn({ random: 'payload' }, {}, (err) => {
     t.equal(err,'Error: unknown payload received');
     t.end();
   });
 });
 
-test('Well formed private fork webhook payload', function(t) {
-  rule.fn(privateFork, {}, function(err, message) {
+test('Well formed private fork webhook payload', (t) => {
+  rule.fn(privateFork, {}, (err, message) => {
     t.error(err, 'does not error');
     t.equal(message.subject, goodResponse, 'Found forked private repo');
     t.end();
   });
 });
 
-test('Well formed public repo fork webhook payload', function(t) {
-  rule.fn(publicFork, {}, function(err, message) {
+test('Well formed public repo fork webhook payload', (t) => {
+  rule.fn(publicFork, {}, (err, message) => {
     t.error(err, 'does not error');
     t.equal(message, publicResponse, 'Found public repo fork');
     t.end();
   });
 });
 
-test('Malformed repo fork webhook payload', function(t) {
-  rule.fn(badPrivateFork, {}, function(err, _message) {
+test('Malformed repo fork webhook payload', (t) => {
+  rule.fn(badPrivateFork, {}, (err) => {
     t.equal(err, 'Error: unknown payload received');
     t.end();
   });

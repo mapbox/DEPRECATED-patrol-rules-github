@@ -1,3 +1,4 @@
+'use strict';
 const githubMadePublicEvent = require('../lib/madePublic/event.js');
 const dispatchNotify = require('../lib/madePublic/dispatchNotify').dispatchNotify;
 const patrolNotify = require('../lib/madePublic/patrolNotify').patrolNotify;
