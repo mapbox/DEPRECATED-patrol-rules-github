@@ -1,3 +1,5 @@
+:warning: **DEPRECATED** :warning:
+
 # patrol-rules-github
 
 [![Build Status](https://travis-ci.org/mapbox/patrol-rules-github.svg?branch=master)](https://travis-ci.org/mapbox/patrol-rules-github)
